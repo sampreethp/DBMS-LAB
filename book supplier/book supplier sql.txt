@@ -1,0 +1,90 @@
+               create database book_db;
+use book_db;
+
+CREATE TABLE Publisher 
+	(name VARCHAR(20) PRIMARY KEY, 
+	phone real, 
+	address VARCHAR(20));
+
+CREATE TABLE Book 
+	(book_id int PRIMARY KEY, 
+	title VARCHAR(20), 
+	pub_year VARCHAR(20), 
+	publisher_name varchar(20) REFERENCES Publisher (name) ON DELETE CASCADE);
+
+CREATE TABLE Book_Authors 
+	(author_name VARCHAR(20), 
+	book_id int REFERENCES Book (book_id) ON DELETE CASCADE, 
+	PRIMARY KEY (book_id, author_name));
+    
+CREATE TABLE Library_Branch 
+	(branch_id int PRIMARY KEY, 
+	branch_name VARCHAR(50), 
+	address VARCHAR(50));
+    
+CREATE TABLE Book_Copies 
+	(no_of_copies int, 
+	book_id int REFERENCES Book(book_id) ON DELETE CASCADE, 
+	branch_id int REFERENCES Library_Branch (branch_id) ON DELETE CASCADE, 
+	PRIMARY KEY (book_id, branch_id));
+
+CREATE TABLE Card 
+	(card_no int PRIMARY KEY); 
+CREATE TABLE Book_Lending 
+	(date_out DATE, 
+	due_date DATE, 
+	book_id int REFERENCES book (book_id) ON DELETE CASCADE, 
+	branch_id int REFERENCES Library_Branch (branch_id) ON DELETE CASCADE, 
+	card_no int REFERENCES Card (card_no) ON DELETE CASCADE, 
+	PRIMARY KEY (book_id, branch_id, card_no));
+    
+INSERT INTO Publisher VALUES 
+	("MCGRAW-HILL", 9989076587, "BANGALORE"),
+    ("PEARSON",9889076565,"NEWDELHI"),
+    ("RANDOM HOUSE",7455679345,"HYDRABAD"),
+    ("HACHETTE LIVRE",8970862340,"CHENNAI"),
+    ("GRUPO PLANETA",7756120238,"BANGALORE"); 
+
+INSERT INTO Book VALUES 
+	(1,"DBMS","JAN-2017","MCGRAW-HILL"),
+    (2,"ADBMS","JUN-2016","MCGRAW-HILL"),
+    (3,"CN","SEP-2016","PEARSON"),
+    (4,"CG","SEP-2015","GRUPO PLANETA"),
+    (5,"OS","MAY-2016","PEARSON"); 
+    
+INSERT INTO Book_Authors VALUES 
+	("NAVATHE", 1),
+    ("NAVATHE", 2),
+    ("TANENBAUM", 3),
+    ("EDWARD ANGEL", 4),
+    ("GALVIN", 5); 
+
+INSERT INTO Library_Branch VALUES 
+	(10,"RR NAGAR","BANGALORE"),
+    (11,"RNSIT","BANGALORE"),
+    (12,"RAJAJI NAGAR","BANGALORE"),
+    (13,"NITTE","MANGALORE"),
+    (14,"MANIPAL","UDUPI"); 
+
+INSERT INTO Book_Copies VALUES 
+	(10, 1, 10),
+    (5, 1, 11),
+    (2, 2, 12),
+    (5, 2, 13),
+    (7, 3, 14),
+    (1, 5, 10),
+    (3, 4, 11); 
+
+INSERT INTO Card VALUES 
+	(100),
+    (101),
+    (102),
+    (103),
+    (104); 
+
+INSERT INTO Book_Lending VALUES 
+	("2017-01-01","2017-06-01", 1, 10, 101),
+    ("2017-01-11","2017-03-11", 3, 14, 101),
+    ("2017-02-21","2017-04-21", 2, 13, 101),
+    ("2017-03-17","2017-07-15", 4, 11, 101),
+    ("2017-04-12","2017-05-12", 1, 11, 104); 
